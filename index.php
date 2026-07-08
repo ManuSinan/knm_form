@@ -78,11 +78,11 @@ try {
                     <label>ലിംഗം <span style="color: var(--error-color)">*</span></label>
                     <div class="gender-selector">
                         <label class="gender-option">
-                            <input type="radio" name="gender" value="ആൺ" required>
+                            <input type="radio" name="gender" value="Male" required>
                             <span>ആൺ</span>
                         </label>
                         <label class="gender-option">
-                            <input type="radio" name="gender" value="പെൺ">
+                            <input type="radio" name="gender" value="Female">
                             <span>പെൺ</span>
                         </label>
                     </div>

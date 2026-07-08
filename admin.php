@@ -79,8 +79,8 @@ $maleCount = 0;
 $femaleCount = 0;
 try {
     $totalCount = $pdo->query("SELECT COUNT(*) FROM applicants")->fetchColumn();
-    $maleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'ആൺ'")->fetchColumn();
-    $femaleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'പെൺ'")->fetchColumn();
+    $maleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'Male'")->fetchColumn();
+    $femaleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'Female'")->fetchColumn();
 } catch (PDOException $e) {
     error_log("Stats Fetch Error: " . $e->getMessage());
 }
@@ -370,10 +370,10 @@ if (isset($_GET['view_id'])) {
                                 <td><?php echo $row['id']; ?></td>
                                 <td style="font-weight: 600;"><?php echo htmlspecialchars($row['applicant_name']); ?></td>
                                 <td>
-                                    <?php if ($row['gender'] === 'ആൺ'): ?>
-                                        <span class="badge badge-gender-male">ആൺ</span>
+                                    <?php if ($row['gender'] === 'Male'): ?>
+                                        <span class="badge badge-gender-male">Male</span>
                                     <?php else: ?>
-                                        <span class="badge badge-gender-female">പെൺ</span>
+                                        <span class="badge badge-gender-female">Female</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($row['mobile'] ?? '-'); ?></td>
