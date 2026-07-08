@@ -1,0 +1,411 @@
+<?php
+// admin.php
+// Admin Dashboard for KNM Registrations
+
+require_once __DIR__ . '/db.php';
+
+// Handle CSV Export
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="knm_registrations_' . date('Y-m-d_H-i') . '.csv"');
+    
+    $output = fopen('php://output', 'w');
+    
+    // Add UTF-8 BOM for Malayalam/Excel compatibility
+    fwrite($output, "\xEF\xBB\xBF");
+    
+    // CSV headers
+    fputcsv($output, [
+        'ID',
+        'Applicant Name (അപേക്ഷകന്റെ പേര്)',
+        'Age (വയസ്സ്)',
+        'DOB (ജനന തീയതി)',
+        'Gender (ലിംഗം)',
+        'Address (വിലാസം)',
+        'PIN (പിൻ)',
+        'Mobile (മൊബൈൽ)',
+        'WhatsApp (വാട്സാപ്പ്)',
+        'Secular Edu (ഭൗതിക വിദ്യാഭ്യാസം)',
+        'Religious Edu (മതപരം)',
+        'Child Name (കുട്ടിയുടെ പേര്)',
+        'Child Class (ക്ലാസ്)',
+        'Madrasa (മദ്റസ)',
+        'Complex (കോംപ്ലക്സ്)',
+        'District (ജില്ല)',
+        'Relationship (ബന്ധം)',
+        'Payment Details (പണമടച്ച വിവരം)',
+        'Registration Date (രജിസ്റ്റർ ചെയ്ത തീയതി)'
+    ]);
+    
+    try {
+        $stmt = $pdo->query("
+            SELECT a.*, c.child_name, c.child_class, c.madrasa, c.complex, c.district, c.relationship 
+            FROM applicants a
+            LEFT JOIN children c ON a.id = c.applicant_id
+            ORDER BY a.id DESC
+        ");
+        while ($row = $stmt->fetch()) {
+            fputcsv($output, [
+                $row['id'],
+                $row['applicant_name'],
+                $row['age'],
+                $row['dob'],
+                $row['gender'],
+                $row['address'],
+                $row['pin'],
+                $row['mobile'],
+                $row['whatsapp'],
+                $row['education_secular'],
+                $row['education_religious'],
+                $row['child_name'],
+                $row['child_class'],
+                $row['madrasa'],
+                $row['complex'],
+                $row['district'],
+                $row['relationship'],
+                $row['payment_info'],
+                $row['created_at']
+            ]);
+        }
+    } catch (PDOException $e) {
+        error_log("CSV Export Error: " . $e->getMessage());
+    }
+    
+    fclose($output);
+    exit;
+}
+
+// Fetch stats
+$totalCount = 0;
+$maleCount = 0;
+$femaleCount = 0;
+try {
+    $totalCount = $pdo->query("SELECT COUNT(*) FROM applicants")->fetchColumn();
+    $maleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'ആൺ'")->fetchColumn();
+    $femaleCount = $pdo->query("SELECT COUNT(*) FROM applicants WHERE gender = 'പെൺ'")->fetchColumn();
+} catch (PDOException $e) {
+    error_log("Stats Fetch Error: " . $e->getMessage());
+}
+
+// Handle Search and Filter
+$search = trim($_GET['search'] ?? '');
+$registrants = [];
+try {
+    if (!empty($search)) {
+        $sql = "SELECT a.*, c.child_name, c.child_class, c.madrasa, c.complex, c.district, c.relationship 
+                FROM applicants a
+                LEFT JOIN children c ON a.id = c.applicant_id
+                WHERE a.applicant_name LIKE :search 
+                   OR a.mobile LIKE :search 
+                   OR a.whatsapp LIKE :search 
+                   OR c.district LIKE :search 
+                   OR c.child_name LIKE :search 
+                ORDER BY a.id DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':search' => "%$search%"]);
+        $registrants = $stmt->fetchAll();
+    } else {
+        $sql = "SELECT a.*, c.child_name, c.child_class, c.madrasa, c.complex, c.district, c.relationship 
+                FROM applicants a
+                LEFT JOIN children c ON a.id = c.applicant_id
+                ORDER BY a.id DESC";
+        $stmt = $pdo->query($sql);
+        $registrants = $stmt->fetchAll();
+    }
+} catch (PDOException $e) {
+    error_log("Fetch Registrants Error: " . $e->getMessage());
+}
+
+// Handle Single Registrant View
+$viewRegistrant = null;
+if (isset($_GET['view_id'])) {
+    $viewId = filter_input(INPUT_GET, 'view_id', FILTER_VALIDATE_INT);
+    if ($viewId) {
+        try {
+            $stmt = $pdo->prepare("
+                SELECT a.*, c.child_name, c.child_class, c.madrasa, c.complex, c.district, c.relationship 
+                FROM applicants a
+                LEFT JOIN children c ON a.id = c.applicant_id
+                WHERE a.id = :id
+            ");
+            $stmt->execute([':id' => $viewId]);
+            $viewRegistrant = $stmt->fetch();
+        } catch (PDOException $e) {
+            error_log("Fetch Single Registrant Error: " . $e->getMessage());
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KNM Education Board - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Extra styles specific to Admin Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        .stat-number {
+            font-family: var(--font-num);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+        .text-center-empty {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-admin">
+
+    <!-- View Registrant Modal/Section -->
+    <?php if ($viewRegistrant): ?>
+        <div class="card">
+            <a href="admin.php<?php echo !empty($search) ? '?search=' . urlencode($search) : ''; ?>" class="back-link">&larr; ലിസ്റ്റിലേക്ക് തിരികെ പോകുക</a>
+            <div class="section-title">അപേക്ഷകന്റെ പൂർണ്ണ വിവരങ്ങൾ (ID: <?php echo $viewRegistrant['id']; ?>)</div>
+            
+            <div class="details-grid">
+                
+                <div class="detail-item">
+                    <div class="detail-label">അപേക്ഷകന്റെ പേര്</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['applicant_name']); ?></div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">ലിംഗം</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['gender']); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">വയസ്സ്</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['age'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">ജനന തീയതി</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['dob'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item col-12" style="grid-column: span 2;">
+                    <div class="detail-label">വിലാസം</div>
+                    <div class="detail-value"><?php echo nl2br(htmlspecialchars($viewRegistrant['address'] ?? '-')); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">പിൻ കോഡ്</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['pin'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">മൊബൈൽ നമ്പർ</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['mobile'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">വാട്സാപ്പ് നമ്പർ</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['whatsapp'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">വിദ്യാഭ്യാസ യോഗ്യത (ഭൗതികം)</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['education_secular'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">വിദ്യാഭ്യാസ യോഗ്യത (മതപരം)</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['education_religious'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">കുട്ടിയുടെ പേര്</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['child_name'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">ക്ലാസ്</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['child_class'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item" style="grid-column: span 2;">
+                    <div class="detail-label">മദ്റസയുടെ പേരും സ്ഥലവും</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['madrasa'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">കോംപ്ലക്സ്</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['complex'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">ജില്ല</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['district'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item" style="grid-column: span 2;">
+                    <div class="detail-label">കുട്ടിയുമായി അപേക്ഷകനുള്ള ബന്ധം</div>
+                    <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['relationship'] ?? '-'); ?></div>
+                </div>
+
+                <div class="detail-item col-12" style="grid-column: span 2;">
+                    <div class="detail-label">പണമടച്ച വിവരം</div>
+                    <div class="detail-value"><?php echo nl2br(htmlspecialchars($viewRegistrant['payment_info'] ?? '-')); ?></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">രജിസ്ട്രേഷൻ തീയതി</div>
+                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['created_at']); ?></div>
+                </div>
+
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Main Dashboard Card -->
+    <div class="card">
+        
+        <div class="admin-header">
+            <div>
+                <h1 class="admin-title">അഡ്മിൻ ഡാഷ്‌ബോർഡ്</h1>
+                <p style="color: var(--text-muted)">സർട്ടിഫിക്കറ്റ് കോഴ്സ് ഇൻ ഇസ്ലാമിക് സ്റ്റഡീസ് - രജിസ്ട്രേഷനുകൾ</p>
+            </div>
+            <div>
+                <a href="index.php" class="btn btn-secondary" style="margin-right: 0.5rem;">രജിസ്ട്രേഷൻ ഫോം</a>
+                <a href="admin.php?export=csv" class="btn btn-accent">&darr; Export to CSV</a>
+            </div>
+        </div>
+
+        <!-- Statistics Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $totalCount; ?></div>
+                <div class="stat-label">ആകെ രജിസ്ട്രേഷൻ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $maleCount; ?></div>
+                <div class="stat-label">ആൺകുട്ടികൾ / പുരുഷന്മാർ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $femaleCount; ?></div>
+                <div class="stat-label">പെൺകുട്ടികൾ / സ്ത്രീകൾ</div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <form method="GET" action="admin.php" class="search-bar">
+            <input type="text" name="search" class="form-control search-input" placeholder="പേര്, ഫോൺ, ജില്ല, കുട്ടിയുടെ പേര് എന്നിവ വെച്ച് തിരയുക..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn btn-primary" style="margin-top: 0; padding: 0.75rem 1.5rem;">തിരയുക</button>
+            <?php if (!empty($search)): ?>
+                <a href="admin.php" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; height: 100%;">Clear</a>
+            <?php endif; ?>
+        </form>
+
+        <!-- Registrants Table -->
+        <div class="table-responsive">
+            <table class="table-registrants">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>അപേക്ഷകന്റെ പേര്</th>
+                        <th style="width: 80px;">ലിംഗം</th>
+                        <th>മൊബൈൽ</th>
+                        <th>ജില്ല</th>
+                        <th>കുട്ടിയുടെ പേര്</th>
+                        <th>ഭൗതികം / മതപരം</th>
+                        <th>തീയതി</th>
+                        <th style="width: 100px; text-align: center;">വിശദാംശങ്ങൾ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($registrants)): ?>
+                        <tr>
+                            <td colspan="9" class="text-center-empty">രജിസ്ട്രേഷനുകൾ ഒന്നും തന്നെ കണ്ടെത്തിയിട്ടില്ല.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($registrants as $row): ?>
+                            <tr>
+                                <td><?php echo $row['id']; ?></td>
+                                <td style="font-weight: 600;"><?php echo htmlspecialchars($row['applicant_name']); ?></td>
+                                <td>
+                                    <?php if ($row['gender'] === 'ആൺ'): ?>
+                                        <span class="badge badge-gender-male">ആൺ</span>
+                                    <?php else: ?>
+                                        <span class="badge badge-gender-female">പെൺ</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['mobile'] ?? '-'); ?></td>
+                                <td><?php echo htmlspecialchars($row['district'] ?? '-'); ?></td>
+                                <td><?php echo htmlspecialchars($row['child_name'] ?? '-'); ?></td>
+                                <td>
+                                    <span style="font-weight: 500;"><?php echo htmlspecialchars($row['education_secular'] ?? '-'); ?></span> / 
+                                    <span style="font-weight: 500;"><?php echo htmlspecialchars($row['education_religious'] ?? '-'); ?></span>
+                                </td>
+                                <td><?php echo date('Y-m-d', strtotime($row['created_at'])); ?></td>
+                                <td style="text-align: center;">
+                                    <a href="admin.php?view_id=<?php echo $row['id']; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border-radius: 6px;">View</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-text">
+            &copy; <?php echo date('Y'); ?> KNM Education Board. All rights reserved.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
