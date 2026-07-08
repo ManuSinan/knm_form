@@ -18,7 +18,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     fputcsv($output, [
         'ID',
         'Applicant Name (അപേക്ഷകന്റെ പേര്)',
-        'Age (വയസ്സ്)',
         'DOB (ജനന തീയതി)',
         'Gender (ലിംഗം)',
         'Address (വിലാസം)',
@@ -48,7 +47,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             fputcsv($output, [
                 $row['id'],
                 $row['applicant_name'],
-                $row['age'],
                 $row['dob'],
                 $row['gender'],
                 $row['address'],
@@ -225,10 +223,7 @@ if (isset($_GET['view_id'])) {
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['gender']); ?></div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">വയസ്സ്</div>
-                    <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['age'] ?? '-'); ?></div>
-                </div>
+
 
                 <div class="detail-item">
                     <div class="detail-label">ജനന തീയതി</div>

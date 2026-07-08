@@ -35,7 +35,6 @@ try {
         CREATE TABLE IF NOT EXISTS applicants (
             id INT AUTO_INCREMENT PRIMARY KEY,
             applicant_name VARCHAR(255) NOT NULL,
-            age INT NULL,
             dob VARCHAR(20) NULL,
             gender VARCHAR(10) NOT NULL,
             address TEXT NULL,

@@ -18,7 +18,6 @@ if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_tok
 
 // Extract and Sanitize Input Data
 $applicant_name     = trim($_POST['applicant_name'] ?? '');
-$age                = filter_input(INPUT_POST, 'age', FILTER_VALIDATE_INT) ?: null;
 $dob                = trim($_POST['dob'] ?? '') ?: null;
 $gender             = trim($_POST['gender'] ?? '');
 $address            = trim($_POST['address'] ?? '') ?: null;
@@ -52,17 +51,16 @@ try {
 
     // 1. Insert into applicants table
     $sqlApplicant = "INSERT INTO applicants (
-                applicant_name, age, dob, gender, address, pin, mobile, whatsapp, 
+                applicant_name, dob, gender, address, pin, mobile, whatsapp, 
                 education_secular, education_religious, payment_info
             ) VALUES (
-                :applicant_name, :age, :dob, :gender, :address, :pin, :mobile, :whatsapp, 
+                :applicant_name, :dob, :gender, :address, :pin, :mobile, :whatsapp, 
                 :education_secular, :education_religious, :payment_info
             )";
             
     $stmtApp = $pdo->prepare($sqlApplicant);
     $stmtApp->execute([
         ':applicant_name'     => $applicant_name,
-        ':age'                => $age,
         ':dob'                => $dob,
         ':gender'             => $gender,
         ':address'            => $address,

@@ -64,17 +64,12 @@ try {
             <div class="section-title">അപേക്ഷകന്റെ വിവരങ്ങൾ</div>
             <div class="form-grid">
                 
-                <div class="form-group col-6">
+                <div class="form-group col-8">
                     <label for="applicant_name">അപേക്ഷകന്റെ പേര് <span style="color: var(--error-color)">*</span></label>
                     <input type="text" id="applicant_name" name="applicant_name" class="form-control" placeholder="മുഴുവൻ പേര് എഴുതുക" required>
                 </div>
 
-                <div class="form-group col-3">
-                    <label for="age">വയസ്സ്</label>
-                    <input type="number" id="age" name="age" class="form-control" min="1" max="120" placeholder="വയസ്സ്">
-                </div>
-
-                <div class="form-group col-3">
+                <div class="form-group col-4">
                     <label for="dob">ജനന തീയതി</label>
                     <input type="date" id="dob" name="dob" class="form-control">
                 </div>
