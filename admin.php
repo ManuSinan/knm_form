@@ -208,95 +208,95 @@ if (isset($_GET['view_id'])) {
     <!-- View Registrant Modal/Section -->
     <?php if ($viewRegistrant): ?>
         <div class="card">
-            <a href="admin.php<?php echo !empty($search) ? '?search=' . urlencode($search) : ''; ?>" class="back-link">&larr; ലിസ്റ്റിലേക്ക് തിരികെ പോകുക</a>
-            <div class="section-title">അപേക്ഷകന്റെ പൂർണ്ണ വിവരങ്ങൾ (ID: <?php echo $viewRegistrant['id']; ?>)</div>
+            <a href="admin.php<?php echo !empty($search) ? '?search=' . urlencode($search) : ''; ?>" class="back-link">&larr; Back to List</a>
+            <div class="section-title">Applicant Complete Details (ID: <?php echo $viewRegistrant['id']; ?>)</div>
             
             <div class="details-grid">
                 
                 <div class="detail-item">
-                    <div class="detail-label">അപേക്ഷകന്റെ പേര്</div>
+                    <div class="detail-label">Applicant Name</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['applicant_name']); ?></div>
                 </div>
                 
                 <div class="detail-item">
-                    <div class="detail-label">ലിംഗം</div>
+                    <div class="detail-label">Gender</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['gender']); ?></div>
                 </div>
 
 
 
                 <div class="detail-item">
-                    <div class="detail-label">ജനന തീയതി</div>
+                    <div class="detail-label">Date of Birth</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['dob'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item col-12" style="grid-column: span 2;">
-                    <div class="detail-label">വിലാസം</div>
+                    <div class="detail-label">Address</div>
                     <div class="detail-value"><?php echo nl2br(htmlspecialchars($viewRegistrant['address'] ?? '-')); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">പിൻ കോഡ്</div>
+                    <div class="detail-label">PIN Code</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['pin'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">മൊബൈൽ നമ്പർ</div>
+                    <div class="detail-label">Mobile Number</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['mobile'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">വാട്സാപ്പ് നമ്പർ</div>
+                    <div class="detail-label">WhatsApp Number</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['whatsapp'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">വിദ്യാഭ്യാസ യോഗ്യത (ഭൗതികം)</div>
+                    <div class="detail-label">Secular Qualification</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['education_secular'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">വിദ്യാഭ്യാസ യോഗ്യത (മതപരം)</div>
+                    <div class="detail-label">Religious Qualification</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['education_religious'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">കുട്ടിയുടെ പേര്</div>
+                    <div class="detail-label">Child's Name</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['child_name'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">ക്ലാസ്</div>
+                    <div class="detail-label">Class</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['child_class'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item" style="grid-column: span 2;">
-                    <div class="detail-label">മദ്റസയുടെ പേരും സ്ഥലവും</div>
+                    <div class="detail-label">Madrasa Name and Place</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['madrasa'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">കോംപ്ലക്സ്</div>
+                    <div class="detail-label">Complex</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['complex'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">ജില്ല</div>
+                    <div class="detail-label">District</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['district'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item" style="grid-column: span 2;">
-                    <div class="detail-label">കുട്ടിയുമായി അപേക്ഷകനുള്ള ബന്ധം</div>
+                    <div class="detail-label">Relationship with Child</div>
                     <div class="detail-value"><?php echo htmlspecialchars($viewRegistrant['relationship'] ?? '-'); ?></div>
                 </div>
 
                 <div class="detail-item col-12" style="grid-column: span 2;">
-                    <div class="detail-label">പണമടച്ച വിവരം</div>
+                    <div class="detail-label">Payment Details</div>
                     <div class="detail-value"><?php echo nl2br(htmlspecialchars($viewRegistrant['payment_info'] ?? '-')); ?></div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">രജിസ്ട്രേഷൻ തീയതി</div>
+                    <div class="detail-label">Registration Date</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['created_at']); ?></div>
                 </div>
 
@@ -309,11 +309,11 @@ if (isset($_GET['view_id'])) {
         
         <div class="admin-header">
             <div>
-                <h1 class="admin-title">അഡ്മിൻ ഡാഷ്‌ബോർഡ്</h1>
-                <p style="color: var(--text-muted)">സർട്ടിഫിക്കറ്റ് കോഴ്സ് ഇൻ ഇസ്ലാമിക് സ്റ്റഡീസ് - രജിസ്ട്രേഷനുകൾ</p>
+                <h1 class="admin-title">Admin Dashboard</h1>
+                <p style="color: var(--text-muted)">Certificate Course in Islamic Studies - Registrations</p>
             </div>
             <div>
-                <a href="index.php" class="btn btn-secondary" style="margin-right: 0.5rem;">രജിസ്ട്രേഷൻ ഫോം</a>
+                <a href="index.php" class="btn btn-secondary" style="margin-right: 0.5rem;">Registration Form</a>
                 <a href="admin.php?export=csv" class="btn btn-accent">&darr; Export to CSV</a>
             </div>
         </div>
@@ -322,22 +322,22 @@ if (isset($_GET['view_id'])) {
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number"><?php echo $totalCount; ?></div>
-                <div class="stat-label">ആകെ രജിസ്ട്രേഷൻ</div>
+                <div class="stat-label">Total Registrations</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?php echo $maleCount; ?></div>
-                <div class="stat-label">ആൺകുട്ടികൾ / പുരുഷന്മാർ</div>
+                <div class="stat-label">Males</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?php echo $femaleCount; ?></div>
-                <div class="stat-label">പെൺകുട്ടികൾ / സ്ത്രീകൾ</div>
+                <div class="stat-label">Females</div>
             </div>
         </div>
 
         <!-- Search Bar -->
         <form method="GET" action="admin.php" class="search-bar">
-            <input type="text" name="search" class="form-control search-input" placeholder="പേര്, ഫോൺ, ജില്ല, കുട്ടിയുടെ പേര് എന്നിവ വെച്ച് തിരയുക..." value="<?php echo htmlspecialchars($search); ?>">
-            <button type="submit" class="btn btn-primary" style="margin-top: 0; padding: 0.75rem 1.5rem;">തിരയുക</button>
+            <input type="text" name="search" class="form-control search-input" placeholder="Search by Name, Phone, District, Child's Name..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn btn-primary" style="margin-top: 0; padding: 0.75rem 1.5rem;">Search</button>
             <?php if (!empty($search)): ?>
                 <a href="admin.php" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; height: 100%;">Clear</a>
             <?php endif; ?>
@@ -349,20 +349,20 @@ if (isset($_GET['view_id'])) {
                 <thead>
                     <tr>
                         <th style="width: 60px;">ID</th>
-                        <th>അപേക്ഷകന്റെ പേര്</th>
-                        <th style="width: 80px;">ലിംഗം</th>
-                        <th>മൊബൈൽ</th>
-                        <th>ജില്ല</th>
-                        <th>കുട്ടിയുടെ പേര്</th>
-                        <th>ഭൗതികം / മതപരം</th>
-                        <th>തീയതി</th>
-                        <th style="width: 100px; text-align: center;">വിശദാംശങ്ങൾ</th>
+                        <th>Applicant Name</th>
+                        <th style="width: 80px;">Gender</th>
+                        <th>Mobile</th>
+                        <th>District</th>
+                        <th>Child's Name</th>
+                        <th>Secular / Religious</th>
+                        <th>Date</th>
+                        <th style="width: 100px; text-align: center;">Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($registrants)): ?>
                         <tr>
-                            <td colspan="9" class="text-center-empty">രജിസ്ട്രേഷനുകൾ ഒന്നും തന്നെ കണ്ടെത്തിയിട്ടില്ല.</td>
+                            <td colspan="9" class="text-center-empty">No registrations found.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($registrants as $row): ?>

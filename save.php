@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Verify CSRF Token
 if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
-    header('Location: index.php?status=error&msg=' . urlencode('സെഷൻ കാലാവധി കഴിഞ്ഞു. ദയവായി വീണ്ടും ശ്രമിക്കുക. (Invalid CSRF)'));
+    header('Location: index.php?status=error&msg=' . urlencode('Session expired. Please try again. (Invalid CSRF)'));
     exit;
 }
 
@@ -36,12 +36,12 @@ $payment_info       = trim($_POST['payment_info'] ?? '') ?: null;
 
 // Basic validation
 if (empty($applicant_name)) {
-    header('Location: index.php?status=error&msg=' . urlencode('അപേക്ഷകന്റെ പേര് നിർബന്ധമാണ്.'));
+    header('Location: index.php?status=error&msg=' . urlencode('Applicant name is required.'));
     exit;
 }
 
 if (empty($gender)) {
-    header('Location: index.php?status=error&msg=' . urlencode('ലിംഗം തിരഞ്ഞെടുക്കുന്നത് നിർബന്ധമാണ്.'));
+    header('Location: index.php?status=error&msg=' . urlencode('Gender selection is required.'));
     exit;
 }
 
@@ -106,8 +106,6 @@ try {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    // Log the actual error internally in production, display friendly error here
-    error_log("Registration Save Error: " . $e->getMessage());
-    header('Location: index.php?status=error&msg=' . urlencode('ഡാറ്റാബേസിൽ സേവ് ചെയ്യാൻ സാധിച്ചില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.'));
+    header('Location: index.php?status=error&msg=' . urlencode('Could not save to database. Please try again.'));
     exit;
 }

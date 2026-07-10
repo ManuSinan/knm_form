@@ -38,20 +38,20 @@ try {
         
         <!-- Header -->
         <div class="header">
-            <h1>സർട്ടിഫിക്കറ്റ് കോഴ്സ് ഇൻ ഇസ്ലാമിക് സ്റ്റഡീസ്</h1>
+            <h1>Certificate Course in Islamic Studies</h1>
             <h2>Run by: KNM Education Board</h2>
-            <h3>രജിസ്ട്രേഷൻ ഫോം</h3>
+            <h3>Registration Form</h3>
         </div>
 
         <!-- Success/Error Messages -->
         <?php if (isset($_GET['status'])): ?>
             <?php if ($_GET['status'] === 'success'): ?>
                 <div class="alert alert-success">
-                    രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി! വിവരങ്ങൾ സേവ് ചെയ്തിട്ടുണ്ട്.
+                    Registration completed successfully! Details have been saved.
                 </div>
             <?php elseif ($_GET['status'] === 'error'): ?>
                 <div class="alert alert-danger">
-                    അപേക്ഷ സമർപ്പിക്കുന്നതിൽ ഒരു തകരാറുണ്ടായി: <?php echo htmlspecialchars($_GET['msg'] ?? 'അജ്ഞാതമായ പിശക്'); ?>
+                    An error occurred while submitting the application: <?php echo htmlspecialchars($_GET['msg'] ?? 'Unknown error'); ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
@@ -61,60 +61,60 @@ try {
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
             <!-- Applicant Information -->
-            <div class="section-title">അപേക്ഷകന്റെ വിവരങ്ങൾ</div>
+            <div class="section-title">Applicant Details</div>
             <div class="form-grid">
                 
                 <div class="form-group col-8">
-                    <label for="applicant_name">അപേക്ഷകന്റെ പേര് <span style="color: var(--error-color)">*</span></label>
-                    <input type="text" id="applicant_name" name="applicant_name" class="form-control" placeholder="മുഴുവൻ പേര് എഴുതുക" required>
+                    <label for="applicant_name">Applicant Name <span style="color: var(--error-color)">*</span></label>
+                    <input type="text" id="applicant_name" name="applicant_name" class="form-control" placeholder="Enter Full Name" required>
                 </div>
 
                 <div class="form-group col-4">
-                    <label for="dob">ജനന തീയതി</label>
+                    <label for="dob">Date of Birth</label>
                     <input type="date" id="dob" name="dob" class="form-control">
                 </div>
 
                 <div class="form-group col-12">
-                    <label>ലിംഗം <span style="color: var(--error-color)">*</span></label>
+                    <label>Gender <span style="color: var(--error-color)">*</span></label>
                     <div class="gender-selector">
                         <label class="gender-option">
                             <input type="radio" name="gender" value="Male" required>
-                            <span>ആൺ</span>
+                            <span>Male</span>
                         </label>
                         <label class="gender-option">
                             <input type="radio" name="gender" value="Female">
-                            <span>പെൺ</span>
+                            <span>Female</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group col-12">
-                    <label for="address">പൂർണ്ണ വിലാസം</label>
-                    <textarea id="address" name="address" rows="3" class="form-control" placeholder="വീട്ടുപേര്, സ്ഥലം, പോസ്റ്റ് ഓഫീസ് വിവരങ്ങൾ അടങ്ങുന്ന വിലാസം"></textarea>
+                    <label for="address">Full Address</label>
+                    <textarea id="address" name="address" rows="3" class="form-control" placeholder="House Name, Place, Post Office, etc."></textarea>
                 </div>
 
                 <div class="form-group col-4">
-                    <label for="pin">പിൻ കോഡ്</label>
-                    <input type="text" id="pin" name="pin" class="form-control" pattern="[0-9]{6}" placeholder="6 അക്ക നമ്പർ" title="ദയവായി 6 അക്ക പിൻ കോഡ് നൽകുക">
+                    <label for="pin">PIN Code</label>
+                    <input type="text" id="pin" name="pin" class="form-control" pattern="[0-9]{6}" placeholder="6-digit PIN" title="Please enter a valid 6-digit PIN code">
                 </div>
 
                 <div class="form-group col-4">
-                    <label for="mobile">മൊബൈൽ നമ്പർ</label>
-                    <input type="text" id="mobile" name="mobile" class="form-control" pattern="[0-9]{10,12}" placeholder="ഫോൺ നമ്പർ" title="സാധുവായ ഫോൺ നമ്പർ നൽകുക">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="text" id="mobile" name="mobile" class="form-control" pattern="[0-9]{10,12}" placeholder="Mobile number" title="Please enter a valid mobile number">
                 </div>
 
                 <div class="form-group col-4">
-                    <label for="whatsapp">വാട്സാപ്പ് നമ്പർ</label>
-                    <input type="text" id="whatsapp" name="whatsapp" class="form-control" pattern="[0-9]{10,12}" placeholder="വാട്സാപ്പ് നമ്പർ" title="സാധുവായ വാട്സാപ്പ് നമ്പർ നൽകുക">
+                    <label for="whatsapp">WhatsApp Number</label>
+                    <input type="text" id="whatsapp" name="whatsapp" class="form-control" pattern="[0-9]{10,12}" placeholder="WhatsApp number" title="Please enter a valid WhatsApp number">
                 </div>
 
             </div>
 
             <!-- Educational Qualification -->
-            <div class="section-title">വിദ്യാഭ്യാസ യോഗ്യത</div>
+            <div class="section-title">Educational Qualification</div>
             
             <div class="form-group mb-3">
-                <label>ഭൗതികം (Secular Qualification)</label>
+                <label>Secular Qualification</label>
                 <div class="radio-group">
                     <input type="radio" id="edu_sslc" name="education_secular" value="SSLC" class="radio-btn-input">
                     <label for="edu_sslc" class="radio-btn-label">SSLC</label>
@@ -131,7 +131,7 @@ try {
             </div>
 
             <div class="form-group">
-                <label>മതപരം (Religious Qualification)</label>
+                <label>Religious Qualification</label>
                 <div class="radio-group">
                     <input type="radio" id="rel_5" name="education_religious" value="5" class="radio-btn-input">
                     <label for="rel_5" class="radio-btn-label">5</label>
@@ -145,35 +145,35 @@ try {
             </div>
 
             <!-- Child Details -->
-            <div class="section-title">കുട്ടിയുടെ വിവരങ്ങൾ</div>
+            <div class="section-title">Child Details</div>
             <div class="form-grid">
                 
                 <div class="form-group col-6">
-                    <label for="child_name">കുട്ടിയുടെ പേര്</label>
-                    <input type="text" id="child_name" name="child_name" class="form-control" placeholder="കുട്ടിയുടെ പേര്">
+                    <label for="child_name">Child's Name</label>
+                    <input type="text" id="child_name" name="child_name" class="form-control" placeholder="Child's Name">
                 </div>
 
                 <div class="form-group col-6">
-                    <label for="child_class">ക്ലാസ്</label>
-                    <input type="text" id="child_class" name="child_class" class="form-control" placeholder="ക്ലാസ്">
+                    <label for="child_class">Class</label>
+                    <input type="text" id="child_class" name="child_class" class="form-control" placeholder="Class">
                 </div>
 
                 <div class="form-group col-12">
-                    <label for="madrasa">മദ്റസയുടെ പേരും സ്ഥലവും</label>
-                    <input type="text" id="madrasa" name="madrasa" class="form-control" placeholder="മദ്റസയുടെ വിവരങ്ങൾ">
+                    <label for="madrasa">Madrasa Name and Place</label>
+                    <input type="text" id="madrasa" name="madrasa" class="form-control" placeholder="Madrasa Name and Place">
                 </div>
 
                 <div class="form-group col-6">
-                    <label>കോംപ്ലക്സ്</label>
+                    <label>Complex</label>
                     <div class="searchable-select-container">
-                        <input type="text" class="form-control searchable-select-input" placeholder="തിരഞ്ഞെടുക്കുക..." readonly>
+                        <input type="text" class="form-control searchable-select-input" placeholder="Select..." readonly>
                         <input type="hidden" name="complex" class="searchable-select-value">
                         <div class="searchable-select-dropdown">
                             <div class="searchable-select-search-box">
-                                <input type="text" class="form-control searchable-select-search-input" placeholder="തിരയുക...">
+                                <input type="text" class="form-control searchable-select-search-input" placeholder="Search...">
                             </div>
                             <ul class="searchable-select-options">
-                                <li data-value="" class="searchable-select-option empty-option">തിരഞ്ഞെടുക്കുക...</li>
+                                <li data-value="" class="searchable-select-option empty-option">Select...</li>
                                 <?php foreach ($complexes as $c): ?>
                                     <li data-value="<?php echo htmlspecialchars($c); ?>" class="searchable-select-option"><?php echo htmlspecialchars($c); ?></li>
                                 <?php endforeach; ?>
@@ -183,16 +183,16 @@ try {
                 </div>
 
                 <div class="form-group col-6">
-                    <label>ജില്ല</label>
+                    <label>District</label>
                     <div class="searchable-select-container">
-                        <input type="text" class="form-control searchable-select-input" placeholder="തിരഞ്ഞെടുക്കുക..." readonly>
+                        <input type="text" class="form-control searchable-select-input" placeholder="Select..." readonly>
                         <input type="hidden" name="district" class="searchable-select-value">
                         <div class="searchable-select-dropdown">
                             <div class="searchable-select-search-box">
-                                <input type="text" class="form-control searchable-select-search-input" placeholder="തിരയുക...">
+                                <input type="text" class="form-control searchable-select-search-input" placeholder="Search...">
                             </div>
                             <ul class="searchable-select-options">
-                                <li data-value="" class="searchable-select-option empty-option">തിരഞ്ഞെടുക്കുക...</li>
+                                <li data-value="" class="searchable-select-option empty-option">Select...</li>
                                 <?php foreach ($districts as $d): ?>
                                     <li data-value="<?php echo htmlspecialchars($d); ?>" class="searchable-select-option"><?php echo htmlspecialchars($d); ?></li>
                                 <?php endforeach; ?>
@@ -202,22 +202,22 @@ try {
                 </div>
 
                 <div class="form-group col-12">
-                    <label for="relationship">കുട്ടിയുമായി അപേക്ഷകനുള്ള ബന്ധം</label>
-                    <input type="text" id="relationship" name="relationship" class="form-control" placeholder="ബന്ധം (ഉദാ: പിതാവ്, മാതാവ്, രക്ഷിതാവ്...)">
+                    <label for="relationship">Relationship with Child</label>
+                    <input type="text" id="relationship" name="relationship" class="form-control" placeholder="Relationship (e.g. Father, Mother, Guardian...)">
                 </div>
 
             </div>
 
             <!-- Payment Information -->
-            <div class="section-title">പണമടച്ച വിവരം</div>
+            <div class="section-title">Payment Information</div>
             <div class="form-grid">
                 <div class="form-group col-12">
-                    <label for="payment_info">പണമടച്ച വിവരം (Payment details, transaction ID, bank...)</label>
-                    <textarea id="payment_info" name="payment_info" rows="3" class="form-control" placeholder="ഫീസടച്ച തീയതി, ബാങ്ക് അക്കൗണ്ട്/UPI ട്രാൻസാക്ഷൻ നമ്പർ തുടങ്ങിയ വിവരങ്ങൾ ഇവിടെ രേഖപ്പെടുത്തുക."></textarea>
+                    <label for="payment_info">Payment Details (Date, Transaction ID, Bank, etc.)</label>
+                    <textarea id="payment_info" name="payment_info" rows="3" class="form-control" placeholder="Enter fee payment date, bank account/UPI transaction number, etc."></textarea>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">രജിസ്റ്റർ ചെയ്യുക</button>
+            <button type="submit" class="btn btn-primary">Register</button>
 
         </form>
 
