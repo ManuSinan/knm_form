@@ -209,6 +209,9 @@ try {
             </div>
 
             <!-- Payment Information -->
+            <div class="payment-qr-block">
+                <img src="assets/knmqr.jpg" alt="KNM QR code" class="header-image">
+            </div>
             <div class="section-title">Payment Information</div>
             <div class="form-grid">
                 <div class="form-group col-12">

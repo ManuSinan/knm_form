@@ -204,6 +204,12 @@ if (isset($_GET['view_id'])) {
 <body>
 
 <div class="container-admin">
+    <div class="card">
+        <div class="header">
+            <h1>KNM Education Board</h1>
+            <h2>Registration Dashboard</h2>
+        </div>
+    </div>
 
     <!-- View Registrant Modal/Section -->
     <?php if ($viewRegistrant): ?>
