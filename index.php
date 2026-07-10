@@ -164,25 +164,6 @@ try {
                 </div>
 
                 <div class="form-group col-6">
-                    <label>Complex</label>
-                    <div class="searchable-select-container">
-                        <input type="text" class="form-control searchable-select-input" placeholder="Select..." readonly>
-                        <input type="hidden" name="complex" class="searchable-select-value">
-                        <div class="searchable-select-dropdown">
-                            <div class="searchable-select-search-box">
-                                <input type="text" class="form-control searchable-select-search-input" placeholder="Search...">
-                            </div>
-                            <ul class="searchable-select-options">
-                                <li data-value="" class="searchable-select-option empty-option">Select...</li>
-                                <?php foreach ($complexes as $c): ?>
-                                    <li data-value="<?php echo htmlspecialchars($c); ?>" class="searchable-select-option"><?php echo htmlspecialchars($c); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group col-6">
                     <label>District</label>
                     <div class="searchable-select-container">
                         <input type="text" class="form-control searchable-select-input" placeholder="Select..." readonly>
@@ -195,6 +176,25 @@ try {
                                 <li data-value="" class="searchable-select-option empty-option">Select...</li>
                                 <?php foreach ($districts as $d): ?>
                                     <li data-value="<?php echo htmlspecialchars($d); ?>" class="searchable-select-option"><?php echo htmlspecialchars($d); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label>Complex</label>
+                    <div class="searchable-select-container">
+                        <input type="text" class="form-control searchable-select-input" placeholder="Select..." readonly>
+                        <input type="hidden" name="complex" class="searchable-select-value">
+                        <div class="searchable-select-dropdown">
+                            <div class="searchable-select-search-box">
+                                <input type="text" class="form-control searchable-select-search-input" placeholder="Search...">
+                            </div>
+                            <ul class="searchable-select-options">
+                                <li data-value="" class="searchable-select-option empty-option">Select...</li>
+                                <?php foreach ($complexes as $c): ?>
+                                    <li data-value="<?php echo htmlspecialchars($c); ?>" class="searchable-select-option"><?php echo htmlspecialchars($c); ?></li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
