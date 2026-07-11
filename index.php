@@ -123,7 +123,7 @@ try {
                 <div class="section-title">Educational Qualification</div>
 
                 <div class="form-group mb-3">
-                    <label>Secular Qualification</label>
+                    <!-- <label>Secular Qualification</label> -->
                     <div class="radio-group">
                         <input type="radio" id="edu_sslc" name="education_secular" value="SSLC" class="radio-btn-input">
                         <label for="edu_sslc" class="radio-btn-label">SSLC</label>
