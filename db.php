@@ -2,10 +2,10 @@
 // db.php
 // MySQL Database connection and initialization
 
-$host = '127.0.0.1';
+$host = 'localhost';
 $db   = 'knm_form';
 $user = 'root';
-$pass = ''; // Local phpMyAdmin usually has empty password
+$pass = 'WordPressDB!234%'; // Local phpMyAdmin usually has empty password
 $charset = 'utf8mb4';
 
 try {
