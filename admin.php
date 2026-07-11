@@ -25,7 +25,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         'Mobile (മൊബൈൽ)',
         'WhatsApp (വാട്സാപ്പ്)',
         'Secular Edu (ഭൗതിക വിദ്യാഭ്യാസം)',
-        'Religious Edu (മതപരം)',
+        'Madrasa Edu (മദ്റസ വിദ്യാഭ്യാസം)',
         'Child Name (കുട്ടിയുടെ പേര്)',
         'Child Class (ക്ലാസ്)',
         'Madrasa (മദ്റസ)',
@@ -262,7 +262,7 @@ if (isset($_GET['view_id'])) {
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">Religious Qualification</div>
+                    <div class="detail-label">Madrasa Qualification</div>
                     <div class="detail-value detail-value-num"><?php echo htmlspecialchars($viewRegistrant['education_religious'] ?? '-'); ?></div>
                 </div>
 
@@ -360,7 +360,7 @@ if (isset($_GET['view_id'])) {
                         <th>Mobile</th>
                         <th>District</th>
                         <th>Child's Name</th>
-                        <th>Secular / Religious</th>
+                        <th>Secular / Madrasa</th>
                         <th>Date</th>
                         <th style="width: 100px; text-align: center;">Details</th>
                     </tr>
